@@ -1,0 +1,136 @@
+/* Estilos generales */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8f8f8; /* Fondo suave */
+    color: #333; /* Color de texto elegante */
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+}
+
+/* Encabezado de la galería */
+h1 {
+    font-family: 'Dancing Script', cursive; /* Fuente romántica */
+    text-align: center;
+    color: #b5838d; /* Color pastel romántico */
+    font-size: 3rem;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+h2 {
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+    color: #b5838d;
+    font-size: 2rem;
+    margin-top: 40px;
+}
+
+/* Contenedor de la galería */
+.galeria {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px; /* Espacio entre fotos */
+    padding: 20px;
+}
+
+.foto {
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    overflow: hidden;
+    transition: transform 0.3s ease-in-out;
+    width: 250px;
+    text-align: center;
+}
+
+.foto img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-bottom: 2px solid #b5838d; /* Borde inferior delicado */
+}
+
+.foto p {
+    margin: 10px 0;
+    font-size: 1.1rem;
+    color: #6d6875; /* Texto con tono suave */
+}
+
+/* Efecto hover sobre las fotos */
+.foto:hover {
+    transform: scale(1.05); /* Zoom al pasar sobre la foto */
+}
+
+/* Formulario de subida de fotos */
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 40px 0;
+}
+
+form input[type="file"] {
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: #fff;
+    border: 2px dashed #b5838d; /* Borde suave y elegante */
+    border-radius: 12px;
+    color: #6d6875;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+}
+
+form button {
+    background-color: #b5838d; /* Color romántico */
+    color: #fff;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 25px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+form button:hover {
+    background-color: #6d6875; /* Efecto suave en el botón */
+}
+
+/* Estilos de los textos */
+p {
+    text-align: center;
+    font-size: 1.2rem;
+}
+
+/* Estilos responsive para dispositivos móviles */
+@media (max-width: 768px) {
+    .foto {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    h1 {
+        font-size: 2.5rem;
+    }
+}
+.btn-descargar {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px; /* Espaciado alrededor del ícono */
+    background-color: transparent; /* Fondo transparente */
+    color: #f7c6c7; /* Color del ícono */
+    border: none; /* Sin borde */
+    cursor: pointer; /* Cursor de puntero al pasar el mouse */
+    font-size: 24px; /* Tamaño del ícono */
+    transition: color 0.3s ease; /* Transición suave para el color */
+}
+
+.btn-descargar:hover {
+    color: #ec9a9b; /* Color de hover */
+}
+
+.btn-descargar i {
+    /* Aquí puedes añadir más estilos si es necesario */
+}
