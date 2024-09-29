@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect
 from .forms import FotoForm
 from .models import Foto
-
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
+import os
 def subir_foto(request):
     if request.method == 'POST':
         form = FotoForm(request.POST, request.FILES)
@@ -28,3 +30,10 @@ def galeria(request):
 
     # Renderizar la página con las fotos y el formulario
     return render(request, 'galeria.html', {'fotos': fotos, 'form': form})
+
+
+@receiver(post_delete, sender=Foto)
+def eliminar_imagen(sender, instance, **kwargs):
+    if instance.imagen:
+        if os.path.isfile(instance.imagen.path):
+            os.remove(instance.imagen.path)

@@ -27,35 +27,44 @@ h2 {
 }
 
 /* Contenedor de la galería */
+/* Contenedor de la galería */
 .galeria {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 20px; /* Espacio entre fotos */
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Mantiene las columnas pero flexibles */
+    gap: 20px;
     padding: 20px;
+    justify-items: center; /* Centra las fotos en su espacio */
 }
 
+/* Contenedor de la foto */
 .foto {
     background-color: #fff;
     border-radius: 12px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
     overflow: hidden;
     transition: transform 0.3s ease-in-out;
-    width: 100px;
+    width: auto; /* Ajusta el ancho al contenido */
+    max-width: 100%; /* Evita que el contenedor sea más grande que la pantalla */
     text-align: center;
+    padding: 10px;
+    box-sizing: border-box;
 }
 
+/* Imágenes dentro del contenedor */
 .foto img {
-    width: 100%;
+    width: auto;
+    max-width: 100%; /* Asegura que la imagen nunca sea más grande que el contenedor */
     height: auto;
     display: block;
-    border-bottom: 2px solid #0e6817; /* Borde inferior delicado */
+    margin: 0 auto; /* Centra la imagen */
 }
 
+/* Texto debajo de la foto */
 .foto p {
-    margin: 0 0;
+    margin: 10px 0;
     font-size: 1.1rem;
-    color: #6d6875; /* Texto con tono suave */
+    color: #6d6875;
+    padding: 0;
 }
 
 /* Efecto hover sobre las fotos */
@@ -63,6 +72,55 @@ h2 {
     transform: scale(1.05); /* Zoom al pasar sobre la foto */
 }
 
+/* Estilos responsivos para dispositivos móviles */
+@media (max-width: 768px) {
+    .galeria {
+        grid-template-columns: repeat(2, 1fr); /* Dos columnas en móviles */
+    }
+
+    h1 {
+        font-size: 2.5rem;
+    }
+}
+/* Foto ampliada al hacer clic */
+.foto.ampliada {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5); /* Fondo oscuro */
+    z-index: 1000;
+    display: flex;
+    flex-direction: column; /* Disposición en columna */
+    justify-content: center; /* Centrar verticalmente */
+    align-items: center; /* Centrar horizontalmente */
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.foto.ampliada img {
+    max-width: 90%;
+    max-height: 80vh;
+    border: none;
+}
+
+.foto.ampliada p, .foto.ampliada a {
+    color: white;
+    text-align: center;
+    margin: 0; /* Elimina cualquier margen que afecte la posición */
+}
+
+.foto.ampliada a {
+    margin-top: 20px; /* Espacio entre la imagen y el botón */
+    font-size: 1.2rem;
+    padding: 10px 20px;
+    background-color: #ffffff;
+    color: #000000;
+    border-radius: 5px;
+    text-decoration: none;
+    text-align: center;
+}
 /* Formulario de subida de fotos */
 form {
     display: flex;
@@ -107,16 +165,7 @@ p {
 }
 
 /* Estilos responsive para dispositivos móviles */
-@media (max-width: 768px) {
-    .foto {
-        width: 100%;
-        margin-bottom: 20px;
-    }
 
-    h1 {
-        font-size: 2.5rem;
-    }
-}
 .btn-descargar {
     display: inline-block;
     margin-top: 10px;
@@ -133,6 +182,57 @@ p {
     color: #1e1c1c; /* Color de hover */
 }
 
-.btn-descargar i {
-    /* Aquí puedes añadir más estilos si es necesario */
+/* Estilos para el modal */
+.modal {
+    display: none; /* Oculto por defecto */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); /* Fondo semitransparente */
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    width: 80%;
+    max-width: 400px;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    cursor: pointer;
+}
+
+.confirm-btn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.cancel-btn {
+    background-color: #f44336;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
 }
