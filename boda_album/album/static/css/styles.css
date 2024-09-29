@@ -12,16 +12,16 @@ body {
 h1 {
     font-family: 'Dancing Script', cursive; /* Fuente romántica */
     text-align: center;
-    color: #b5838d; /* Color pastel romántico */
-    font-size: 3rem;
-    margin-top: 20px;
-    margin-bottom: 20px;
+    color: #157d0b; /* Color pastel romántico */
+    font-size: 4.5rem;
+    margin-top: 40px;
+    margin-bottom: 5px;
 }
 
 h2 {
     font-family: 'Poppins', sans-serif;
     text-align: center;
-    color: #b5838d;
+    color: #157d0b;
     font-size: 2rem;
     margin-top: 40px;
 }
@@ -41,7 +41,7 @@ h2 {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
     overflow: hidden;
     transition: transform 0.3s ease-in-out;
-    width: 250px;
+    width: 100px;
     text-align: center;
 }
 
@@ -49,11 +49,11 @@ h2 {
     width: 100%;
     height: auto;
     display: block;
-    border-bottom: 2px solid #b5838d; /* Borde inferior delicado */
+    border-bottom: 2px solid #0e6817; /* Borde inferior delicado */
 }
 
 .foto p {
-    margin: 10px 0;
+    margin: 0 0;
     font-size: 1.1rem;
     color: #6d6875; /* Texto con tono suave */
 }
@@ -70,14 +70,16 @@ form {
     align-items: center;
     margin: 40px 0;
 }
-
+form label{
+    color: #157d0b;
+}
 form input[type="file"] {
     margin-bottom: 20px;
     padding: 10px;
     background-color: #fff;
     border: 2px dashed #b5838d; /* Borde suave y elegante */
     border-radius: 12px;
-    color: #6d6875;
+    color: #0c240d;
     cursor: pointer;
     font-family: 'Poppins', sans-serif;
     font-size: 1rem;
@@ -120,15 +122,15 @@ p {
     margin-top: 10px;
     padding: 10px; /* Espaciado alrededor del ícono */
     background-color: transparent; /* Fondo transparente */
-    color: #f7c6c7; /* Color del ícono */
+    color: #236810; /* Color del ícono */
     border: none; /* Sin borde */
     cursor: pointer; /* Cursor de puntero al pasar el mouse */
-    font-size: 24px; /* Tamaño del ícono */
+    font-size: 12px; /* Tamaño del ícono */
     transition: color 0.3s ease; /* Transición suave para el color */
 }
 
 .btn-descargar:hover {
-    color: #ec9a9b; /* Color de hover */
+    color: #1e1c1c; /* Color de hover */
 }
 
 .btn-descargar i {

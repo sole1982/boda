@@ -8,48 +8,128 @@
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOMi68mF0Xr4V5F8tAAWQ6mPOp/uvRjH8" crossorigin="anonymous">
+    {% load static %}
+
     <style>
+        /* Aplicar fondo de imagen al body */
+        body {
+            background-image: url("{% static 'img/p.png' %}");
+            background-size: cover; /* Hace que la imagen cubra toda la pantalla */
+            background-position: center; /* Centra la imagen */
+            background-repeat: no-repeat; /* Evita que la imagen se repita */
+            min-height: 100vh; /* Asegura que el body tenga al menos el tamaño de la pantalla */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white; /* Texto en blanco para que contraste */
+        }
+    
         .galeria {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+    
+        .foto img {
+            max-width: 100%;
+            height: auto;
+        }
+    
+        .titulo-con-imagen {
+            text-align: center;
+        }
+    
+        .btn-subir {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+    
+        @media only screen and (max-width: 300px) {
+            .titulo-con-imagen {
+                flex-direction: column;
+            }
+        }
+        .explicativo {
+    margin: 20px;
+    text-align: center;
+    font-size: 18px;
+    /* Fondo oscuro semitransparente */
+    padding: 20px;
+    border-radius: 10px;
+    font-family: 'Dancing Script', cursive;
+    position: relative; /* Para superponer la imagen */
+    z-index: 1;
+    color: black;
 }
 
-.foto img {
-    max-width: 100%;
-    height: auto;
+.explicativo::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url("{% static 'img/p.png' %}");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.5; /* Controla el nivel de transparencia de la imagen */
+    z-index: -1; /* Coloca la imagen debajo del contenido */
+    border-radius: 10px; /* Mantiene el borde redondeado */
 }
     </style>
-</head>
+    
+    <body>
+        <h1>Paola & Facu <br>  Galeria de fotos</h1>
+        <div class="explicativo">
+            <p><strong>¡Bienvenidos a nuestra galería de fotos!</strong><br>
+            Aquí podrán compartir y disfrutar de las fotos del evento en tiempo real. Todos los invitados podrán ver y descargar las fotos que suban, para que ninguno de esos momentos especiales se pierda. ¡Así que no duden en subir sus mejores capturas y llevarse los recuerdos más lindos!</p>
+        </div>
 
-<body>
-    <h1>Galería de Fotos</h1>
+        <!-- Título centrado -->
+        <div class="titulo-con-imagen">
+            
+            
+            <!-- Botón que redirige a la sección de subir fotos -->
+            <a href="#subir-foto" class="btn-subir" style="background-color: #4CAF50; border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;">Subir Foto</a> <!-- Botón de redirección -->
+        </div>
+    
+        <!-- Mostrar las fotos subidas -->
+        <div class="galeria">
+            {% for foto in fotos %}
+                <div class="foto">
+                    <img src="{{ foto.imagen.url }}" alt="Foto de {{ foto.nombre_invitado }}">
+                    <p>Subida por: {{ foto.nombre_invitado }}</p>
+                    <a href="{{ foto.imagen.url }}" download="foto_{{ foto.nombre_invitado }}.jpg" class="btn-descargar" title="Descargar Foto">
+                        <i class="fas fa-download">Descargar</i>
+                    </a>
+                </div>
+            {% empty %}
+                <p>No hay fotos subidas aún.</p>
+            {% endfor %}
+        </div>
+    
+        <!-- Sección de subir foto -->
+        <hr>
+        <h1 id="subir-foto">Subir nueva foto</h1> <!-- Agregar un id para la ancla -->
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit"style="background-color: #4CAF50;">Subir foto</button>
+        </form>
+    </body>
+    </html>
+    
 
-    <!-- Mostrar las fotos subidas -->
-    <div class="galeria">
-        {% for foto in fotos %}
-            <div class="foto">
-                <img src="{{ foto.imagen.url }}" alt="Foto de {{ foto.nombre_invitado }}">
-                <p>Subida por: {{ foto.nombre_invitado }}</p>
-                <!-- Botón de descarga como ícono -->
-    <a href="{{ foto.imagen.url }}" download="foto_{{ foto.nombre_invitado }}.jpg" class="btn-descargar" title="Descargar Foto">
-        <i class="fas fa-download">Descargar</i> <!-- Ícono de descarga -->
-    </a>
-            </div>
-        {% empty %}
-            <p>No hay fotos subidas aún.</p>
-        {% endfor %}
-    </div>
-
-    <hr>
-
-    <!-- Formulario para subir más fotos -->
-    <h2>Subir nueva foto</h2>
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Subir foto</button>
-    </form>
-</body>
-</html>
 
