@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Última Foto</title>
+    {% load static %}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+            text-align: center;
+            color: white;
+        }
+
+        /* 🔹 Video de fondo */
+        .video-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+
+        /* 🔹 Texto en la esquina */
+        .background-text {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 3vw;
+            font-family: 'Dancing Script', cursive;
+            font-weight: bold;
+            color: rgba(240, 177, 227, 0.8);
+            text-shadow: 0 0 15px rgb(206, 29, 150);
+            z-index: 3;
+            text-transform: uppercase;
+        }
+
+        /* 🔹 Contenedor de la imagen */
+        .foto-container {
+            width: 50%;
+            max-height: 90vh;
+            position: relative;
+            z-index: 2;
+        }
+
+        .foto-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(201, 10, 185, 0.8);
+        }
+
+        #mensaje-no-foto {
+            font-size: 1.5em;
+            z-index: 2;
+        }
+    </style>
+</head>
+<body>
+    <!-- 🔹 Video de fondo -->
+    <video class="video-bg" autoplay muted loop>
+        <source src="{% static 'videos/fondo.mp4' %}" type="video/mp4">
+        Tu navegador no soporta el video.
+    </video>
+
+    <div class="background-text">Camila XV Party</div>
+    
+    <div class="foto-container">
+        <img id="ultima-foto" src="" alt="Cargando foto..." style="display: none;">
+        <p id="mensaje-no-foto">No hay fotos aún.</p>
+    </div>
+
+    <script>
+        let fotosAnteriores = []; 
+        let indiceFoto = 0;
+
+        function cargarUltimaFoto() {
+            $.ajax({
+                url: "{% url 'obtener_ultima_foto' %}",
+                method: "GET",
+                success: function(data) {
+                    if (data.urls.length > 0) {
+                        fotosAnteriores = data.urls; 
+                        indiceFoto = 0; 
+                        mostrarFoto(fotosAnteriores[indiceFoto]);
+                    }
+                }
+            });
+        }
+
+        function mostrarFoto(url) {
+            $("#ultima-foto").fadeOut(500, function() {
+                $(this).attr("src", url).fadeIn(500);
+                $("#mensaje-no-foto").hide();
+            });
+        }
+
+        function cambiarFoto() {
+            if (fotosAnteriores.length > 0) {
+                indiceFoto = (indiceFoto + 1) % fotosAnteriores.length;
+                mostrarFoto(fotosAnteriores[indiceFoto]);
+            }
+        }
+
+        cargarUltimaFoto();
+        setInterval(() => {
+            if (fotosAnteriores.length > 1) {
+                cambiarFoto();
+            } else {
+                cargarUltimaFoto();
+            }
+        }, 5000);
+    </script>
+</body>
+</html>

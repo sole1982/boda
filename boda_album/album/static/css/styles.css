@@ -62,8 +62,8 @@ h2 {
 /* Texto debajo de la foto */
 .foto p {
     margin: 10px 0;
-    font-size: 1.1rem;
-    color: #6d6875;
+    font-size: 2rem;
+    color: #1e1e1f;
     padding: 0;
 }
 
@@ -129,7 +129,7 @@ form {
     margin: 40px 0;
 }
 form label{
-    color: #157d0b;
+    color: #0d0c0d;
 }
 form input[type="file"] {
     margin-bottom: 20px;
