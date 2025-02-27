@@ -3,7 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="Cumple Cande XV">
+<meta property="og:description" content="Galeria de Fotos en tiempo real.">
+<meta property="og:image" content="https://galeriadefotos.pythonanywhere.com/static/img/hero.jpeg">
+<meta property="og:url" content="https://galeriadefotos.pythonanywhere.com/">
+<meta property="og:type" content="website">
     <title>Última Foto</title>
+    </head>
     {% load static %}
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
@@ -21,14 +27,16 @@
 
         /* 🔹 Video de fondo */
         .video-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            z-index: -1;
-        }
+    position: fixed;
+    top: 0;
+    left: 50%;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    transform: translateX(-50%);
+    z-index: -1;
+}
+
 
         /* 🔹 Texto en la esquina */
         .background-text {
@@ -38,7 +46,7 @@
             font-size: 3vw;
             font-family: 'Dancing Script', cursive;
             font-weight: bold;
-            color: rgba(240, 177, 227, 0.8);
+            color: rgba(212, 104, 21, 0.8);
             text-shadow: 0 0 15px rgb(206, 29, 150);
             z-index: 3;
             text-transform: uppercase;
@@ -57,28 +65,46 @@
             height: auto;
             display: block;
             border-radius: 10px;
-            box-shadow: 0 0 20px rgba(201, 10, 185, 0.8);
+            box-shadow: 0 0 20px rgba(225, 178, 8, 0.8);
         }
 
         #mensaje-no-foto {
             font-size: 1.5em;
             z-index: 2;
         }
+        #fullscreen-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 10px 15px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+}
+
+#fullscreen-btn:hover {
+    background: rgba(0, 0, 0, 0.9);
+}
+
     </style>
 </head>
 <body>
     <!-- 🔹 Video de fondo -->
-    <video class="video-bg" autoplay muted loop>
-        <source src="{% static 'videos/fondo.mp4' %}" type="video/mp4">
+    <video class="video-bg" autoplay muted loop onclick="toggleFullScreen()">
+        <source src="{% static 'videos/camila.mp4' %}" type="video/mp4">
         Tu navegador no soporta el video.
     </video>
-
-    <div class="background-text">Camila XV Party</div>
+    
     
     <div class="foto-container">
         <img id="ultima-foto" src="" alt="Cargando foto..." style="display: none;">
         <p id="mensaje-no-foto">No hay fotos aún.</p>
     </div>
+    <button id="fullscreen-btn" onclick="toggleFullScreen()">🔳 Pantalla Completa</button>
 
     <script>
         let fotosAnteriores = []; 
@@ -120,6 +146,30 @@
                 cargarUltimaFoto();
             }
         }, 5000);
+    </script>
+    <script>
+  function toggleFullScreen() {
+    let fullscreenBtn = document.getElementById("fullscreen-btn");
+
+    if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().then(() => {
+            fullscreenBtn.style.display = "none"; // Oculta el botón al activar pantalla completa
+        }).catch(err => {
+            console.log(`Error al intentar entrar en pantalla completa: ${err.message}`);
+        });
+    } else {
+        document.exitFullscreen().then(() => {
+            fullscreenBtn.style.display = "block"; // Muestra el botón al salir de pantalla completa
+        });
+    }
+}
+
+// Detectar cambios en el modo pantalla completa y ocultar/mostrar el botón
+document.addEventListener("fullscreenchange", () => {
+    let fullscreenBtn = document.getElementById("fullscreen-btn");
+    fullscreenBtn.style.display = document.fullscreenElement ? "none" : "block";
+});
+
     </script>
 </body>
 </html>
