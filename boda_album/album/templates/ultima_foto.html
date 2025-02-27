@@ -71,6 +71,7 @@
         #mensaje-no-foto {
             font-size: 1.5em;
             z-index: 2;
+            background: url('{% static "img/default.jpeg" %}');
         }
         #fullscreen-btn {
     position: fixed;
@@ -101,52 +102,58 @@
     
     
     <div class="foto-container">
-        <img id="ultima-foto" src="" alt="Cargando foto..." style="display: none;">
-        <p id="mensaje-no-foto">No hay fotos aún.</p>
+        <img id="ultima-foto" src="{% static 'img/default.jpeg' %}" alt="Cargando foto..." loading="lazy" onerror="this.src='{% static 'img/default.jpeg' %}'">
+        <p id="mensaje-no-foto" style="display: none;">No hay fotos aún.</p>
     </div>
     <button id="fullscreen-btn" onclick="toggleFullScreen()">🔳 Pantalla Completa</button>
+<!-- template.html -->
+<script>
+  let fotosAnteriores = [];
+let indiceFoto = 0;
 
-    <script>
-        let fotosAnteriores = []; 
-        let indiceFoto = 0;
-
-        function cargarUltimaFoto() {
-            $.ajax({
-                url: "{% url 'obtener_ultima_foto' %}",
-                method: "GET",
-                success: function(data) {
-                    if (data.urls.length > 0) {
-                        fotosAnteriores = data.urls; 
-                        indiceFoto = 0; 
-                        mostrarFoto(fotosAnteriores[indiceFoto]);
-                    }
-                }
-            });
-        }
-
-        function mostrarFoto(url) {
-            $("#ultima-foto").fadeOut(500, function() {
-                $(this).attr("src", url).fadeIn(500);
-                $("#mensaje-no-foto").hide();
-            });
-        }
-
-        function cambiarFoto() {
-            if (fotosAnteriores.length > 0) {
-                indiceFoto = (indiceFoto + 1) % fotosAnteriores.length;
+function cargarUltimaFoto() {
+    fetch("{% url 'obtener_ultima_foto' %}", { cache: "no-store" })
+        .then(response => response.json())
+        .then(data => {
+            if (data.urls.length > 0) {
+                fotosAnteriores = data.urls;
+                indiceFoto = 0;
                 mostrarFoto(fotosAnteriores[indiceFoto]);
-            }
-        }
-
-        cargarUltimaFoto();
-        setInterval(() => {
-            if (fotosAnteriores.length > 1) {
-                cambiarFoto();
             } else {
-                cargarUltimaFoto();
+                mostrarFoto("{% static 'img/default.jpeg' %}");
             }
-        }, 5000);
-    </script>
+        });
+}
+
+function mostrarFoto(url) {
+    const img = document.getElementById("ultima-foto");
+    if (img.src !== url) {
+        img.style.opacity = 0;
+        setTimeout(() => {
+            img.src = url;
+            img.style.opacity = 1;
+            document.getElementById("mensaje-no-foto").style.display = "none";
+        }, 500);
+    }
+}
+
+function cambiarFoto() {
+    if (fotosAnteriores.length > 1) {
+        indiceFoto = (indiceFoto + 1) % fotosAnteriores.length;
+        mostrarFoto(fotosAnteriores[indiceFoto]);
+    } else {
+        cargarUltimaFoto();
+    }
+}
+
+// Cargar imagen inicial
+cargarUltimaFoto();
+setInterval(cambiarFoto, 5000);
+
+
+</script>
+
+
     <script>
   function toggleFullScreen() {
     let fullscreenBtn = document.getElementById("fullscreen-btn");

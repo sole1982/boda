@@ -5,6 +5,10 @@ from django.db.models.signals import post_delete
 from django.dispatch import receiver
 import os
 from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseForbidden
+from django.views.decorators.cache import never_cache
+from django.templatetags.static import static
 def subir_foto(request):
     if request.method == 'POST':
         form = FotoForm(request.POST, request.FILES)
@@ -43,6 +47,18 @@ def eliminar_imagen(sender, instance, **kwargs):
         if os.path.isfile(instance.imagen.path):
             os.remove(instance.imagen.path)
 
+@login_required
+def eliminar_foto(request, foto_id):
+    foto = get_object_or_404(Foto, id=foto_id)
+
+    if request.user.is_superuser:
+        foto.delete()
+        return redirect('galeria')  # Redirigir a la galería después de eliminar
+    else:
+        return HttpResponseForbidden("No tienes permiso para eliminar esta foto.")
+
+
+
 def agregar_comentario(request, foto_id):
     foto = get_object_or_404(Foto, id=foto_id)
 
@@ -73,9 +89,13 @@ def agregar_reaccion(request, foto_id):
 def ultima_foto(request):
     ultima_foto = Foto.objects.last()  # Obtiene la última foto subida
     return render(request, 'ultima_foto.html', {'ultima_foto': ultima_foto})
-
-
+@never_cache
 def obtener_ultima_foto(request):
-    fotos = Foto.objects.order_by('-id')[:5]  # Últimas 5 fotos
-    urls = [foto.imagen.url for foto in fotos]
-    return JsonResponse({'urls': urls})
+    fotos = Foto.objects.only('imagen', 'fecha_subida').order_by('-id')[:5]
+    
+    if fotos:
+        urls = [request.build_absolute_uri(f"{foto.imagen.url}?t={foto.fecha_subida.timestamp()}") for foto in fotos]
+    else:
+        urls = [request.build_absolute_uri(static('img/default.jpeg'))]
+
+    return JsonResponse({'urls': urls}, headers={'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0'})

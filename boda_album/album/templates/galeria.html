@@ -256,6 +256,22 @@ h2 {
                 grid-template-columns: 1fr;
             }
         }
+
+        .btn-eliminar {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.3s ease-in-out;
+}
+
+.btn-eliminar:hover {
+    background-color: #cc0000;
+}
+
     </style>
 </head>
 <body>
@@ -264,7 +280,7 @@ h2 {
     </a>
     
     <div class="hero">   <div class="hero-text">
-        <div class="hero-title">Camila XV</div>
+        <div class="hero-title">Candela XV</div>
         <div class="hero-subtitle">Galería de Fotos</div>
     </div></div>
    
@@ -277,7 +293,14 @@ h2 {
             <p><strong>{{ foto.nombre_invitado }}</strong> <a href="{{ foto.imagen.url }}" download="foto_{{ foto.nombre_invitado }}.jpg" class="btn-descargar" title="Descargar Foto">
                 <i class="fas fa-download"></i>
             </a></p>
-           
+            {% if request.user.is_superuser %}
+            <form action="{% url 'eliminar_foto' foto.id %}" method="POST" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn-eliminar" onclick="return confirm('¿Estás seguro de eliminar esta foto?');">
+                    <i class="fas fa-trash"></i> Eliminar
+                </button>
+            </form>
+            {% endif %}
         </div>
             <div class="reacciones">
                 <button type="submit" form="reaccion-form-{{ foto.id }}" name="tipo" value="like"><i class="fas fa-thumbs-up"></i> {{ foto.likes }}</button>
@@ -328,7 +351,14 @@ h2 {
         
    
     Última Foto Subida</h2>
-
+    <div class="d-flex">
+        {% if request.user.is_authenticated %}
+            <span class="navbar-text me-3">Hola, {{ request.user.username }}</span>
+            <a href="{% url 'logout' %}" class="btn btn-danger">Cerrar sesión</a>
+        {% else %}
+            <a href="{% url 'login' %}" class="btn btn-primary">Iniciar sesión</a>
+        {% endif %}
+    </div>
     <script>
         var modal = document.getElementById('confirmModal');
         var btnSubmit = document.querySelector('form button[type="submit"]');
