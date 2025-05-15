@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta property="og:title" content="Cumple Cande XV">
     <meta property="og:description" content="Galeria de Fotos en tiempo real.">
-    <meta property="og:image" content="https://galeriadefotos.pythonanywhere.com/static/img/hero.jpeg">
+    <meta property="og:image" content="https://galeriadefotos.pythonanywhere.com/static/img/hero.jpg">
     <meta property="og:url" content="https://galeriadefotos.pythonanywhere.com/">
     <meta property="og:type" content="website">
     <title>Galería</title>
@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
-            background: url('{% static "img/fondo4.png" %}') no-repeat center center/cover;
+            background-color: #151415;
             color: #f1e3e3;
             font-family: 'Poppins', sans-serif;
             text-align: center;
@@ -49,7 +49,7 @@ h2 {
     position: relative;
     width: 100%;
     height: 70vh;
-    background: url('{% static "img/hero.jpeg" %}') no-repeat center top / cover;
+    background: url('{% static "img/hero.jpg" %}') no-repeat center top / cover;
     display: flex;
     flex-direction: column;
     align-content: center;
@@ -148,7 +148,7 @@ h2 {
             background-color: #a31270;
         }
         .subir-foto {
-            background-color: #f0edee6a;
+            background-color: #e2d6dafb;
             padding: 15px;
             border-radius: 10px;
             display: inline-block;
@@ -333,16 +333,17 @@ h2 {
     </div>
     <div class="subir-foto" id="subir-foto">
         <h2><i class="fas fa-camera"></i> Subir Nueva Foto</h2>
-        <form method="POST" enctype="multipart/form-data">
+        <form id="uploadForm" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             {{ form.as_p }}
-            <button type="submit"><i class="fas fa-upload"></i> Subir foto</button>
+            <button id="btnSubirFoto" type="submit"><i class="fas fa-upload"></i> Subir foto</button>
+   
         </form>
     </div>
     <div id="confirmModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <p>¿Estás seguro de que deseas subir esta foto? ¡Acordate que Camila la van a ver! 😁</p>
+            <p>¿Estás seguro de que deseas subir esta foto? ¡Acordate que Cande la va a ver! 😁</p>
             <button id="confirmUpload" class="confirm-btn"><i class="fas fa-check"></i> Sí, subir foto</button>
             <button id="cancelUpload" class="cancel-btn"><i class="fas fa-times"></i> Cancelar</button>
         </div>
@@ -354,14 +355,17 @@ h2 {
     <div class="d-flex">
         {% if request.user.is_authenticated %}
             <span class="navbar-text me-3">Hola, {{ request.user.username }}</span>
-            <a href="{% url 'logout' %}" class="btn btn-danger">Cerrar sesión</a>
+            <form action="{% url 'logout' %}" method="post">
+                {% csrf_token %}
+                <button type="submit">Cerrar sesión</button>
+            </form>
         {% else %}
             <a href="{% url 'login' %}" class="btn btn-primary">Iniciar sesión</a>
         {% endif %}
     </div>
     <script>
         var modal = document.getElementById('confirmModal');
-        var btnSubmit = document.querySelector('form button[type="submit"]');
+        var btnSubmit = document.querySelector('btnSubirFoto');
         var btnConfirm = document.getElementById('confirmUpload');
         var btnCancel = document.getElementById('cancelUpload');
         var spanClose = document.getElementsByClassName("close")[0];
@@ -373,7 +377,7 @@ h2 {
     
         btnConfirm.addEventListener('click', function() {
             modal.style.display = 'none';
-            document.querySelector('form').submit();
+            document.querySelector('uploadForm').submit();
         });
     
         btnCancel.addEventListener('click', function() {

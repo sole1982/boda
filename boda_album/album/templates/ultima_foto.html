@@ -96,13 +96,13 @@
 <body>
     <!-- 🔹 Video de fondo -->
     <video class="video-bg" autoplay muted loop onclick="toggleFullScreen()">
-        <source src="{% static 'videos/camila.mp4' %}" type="video/mp4">
+        <source src="{% static 'videos/fondo.mp4' %}" type="video/mp4">
         Tu navegador no soporta el video.
     </video>
     
     
     <div class="foto-container">
-        <img id="ultima-foto" src="{% static 'img/default.jpeg' %}" alt="Cargando foto..." loading="lazy" onerror="this.src='{% static 'img/default.jpeg' %}'">
+        <img id="ultima-foto" src="{% static 'img/default.png' %}" alt="Cargando foto..." loading="lazy" onerror="this.src='{% static 'img/default.png' %}'">
         <p id="mensaje-no-foto" style="display: none;">No hay fotos aún.</p>
     </div>
     <button id="fullscreen-btn" onclick="toggleFullScreen()">🔳 Pantalla Completa</button>
